@@ -1,0 +1,40 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./pb_data/data.db"
+}
+
+model Disc {
+  id                String     @default(cuid()) @id
+  name              String
+  manufacturer      String?
+  category          String
+  speed             Int
+  glide             Int
+  turn              Int
+  fade              Int
+  stability         String
+  link              String
+  pic               String
+  color             String
+  background_color  String
+  inBag             Boolean @default(false)
+  owner             User?   @relation(fields: [ownerId], references: [id])
+  ownerId           String?
+}
+
+model User {
+  id            String       @default(cuid()) @id
+  name          String?
+  email         String?   @unique
+  createdAt     DateTime  @default(now()) @map(name: "created_at")
+  updatedAt     DateTime  @updatedAt @map(name: "updated_at")
+  discs         Disc[]
+  @@map(name: "users")
+}
